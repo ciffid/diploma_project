@@ -1,24 +1,26 @@
 package game
 
 import (
-	"dota3/assets"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type Game struct {
+	player *Player
 }
 
 func NewGame() *Game {
-	g := &Game{}
-	return g
+	return &Game{
+		player: NewPLayer(100, 100),
+	}
 }
 
 func (g *Game) Update() error {
+	g.player.Update()
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	screen.DrawImage(assets.Images["player"], nil)
+	g.player.Draw(screen)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
