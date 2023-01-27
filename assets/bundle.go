@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"embed"
 	"image"
+	_ "image/jpeg"
 	_ "image/png"
 	"log"
 
@@ -16,11 +17,9 @@ import (
 var fs embed.FS
 var Images = make(map[string]*ebiten.Image)
 
-//var Fonts = make(map[string]*etxt.Font)
-
 func Init() {
 	Images["player"] = LoadImage(fs, "data/image/player.png")
-	//Fonts["start"] = LoadFont(fs, "data/font/roboto-regular.ttf")
+	Images["start-location"] = LoadImage(fs, "data/image/start-location.jpg")
 }
 
 func LoadImage(fs embed.FS, path string) *ebiten.Image {
