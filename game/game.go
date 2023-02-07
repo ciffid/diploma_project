@@ -1,22 +1,28 @@
 package game
 
 import (
+	"dota3/data"
+	"dota3/display"
 	"dota3/levels"
 	"github.com/hajimehoshi/ebiten/v2"
+	"image"
 )
 
 type Game struct {
 	player *Player
 	level  *levels.StartLevel
-	camera *Camera
+	camera *display.Camera
+	bounds *image.Rectangle
 }
 
 func NewGame() *Game {
 	g := &Game{
 		player: NewPlayer(100, 100),
 		level:  levels.NewStartLevel(),
+		bounds: &image.Rectangle{},
 	}
-	g.camera = NewCamera(g.player)
+	bounder := data.NewScreenBounder(g.bounds)
+	g.camera = display.NewCamera(bounder, g.player)
 	return g
 }
 
@@ -34,5 +40,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
+	g.bounds.Max.X = outsideWidth
+	g.bounds.Max.Y = outsideHeight
 	return outsideWidth, outsideHeight
 }

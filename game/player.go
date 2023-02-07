@@ -2,6 +2,7 @@ package game
 
 import (
 	"dota3/assets"
+	"dota3/display"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 )
@@ -47,12 +48,13 @@ func (p *Player) Update() {
 	}
 }
 
-func (p *Player) Draw(screen *ebiten.Image) {
+func (p *Player) Draw(screen *ebiten.Image, camera *display.Camera) {
 	op := &ebiten.DrawImageOptions{}
 	if p.Direction == DirectionRight {
 		op.GeoM.Scale(-1, 1)
 		op.GeoM.Translate(float64(p.Sprite.Bounds().Dx()), 0)
 	}
+	op.GeoM.Translate(-camera.X, -camera.Y)
 	op.GeoM.Translate(p.X, p.Y)
 	screen.DrawImage(p.Sprite, op)
 }

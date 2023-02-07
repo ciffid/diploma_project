@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"dota3/game"
+	"dota3/display"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 )
@@ -23,10 +23,10 @@ func (l *Background) Update(screen image.Rectangle) {
 
 }
 
-func (l *Background) Draw(screen *ebiten.Image, camera *game.Camera) {
+func (l *Background) Draw(screen *ebiten.Image, camera *display.Camera) {
 	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(-)
 	op.GeoM.Scale(l.scaleW, l.scaleH)
+	op.GeoM.Translate(-camera.X, -camera.Y)
 	screen.DrawImage(l.locationImage, op)
 }
 

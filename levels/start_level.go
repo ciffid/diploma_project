@@ -2,7 +2,7 @@ package levels
 
 import (
 	"dota3/assets"
-	"dota3/game"
+	"dota3/display"
 	"dota3/ui"
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -21,6 +21,6 @@ func NewStartLevel() *StartLevel {
 func (s *StartLevel) Update() {
 }
 
-func (s *StartLevel) Draw(screen *ebiten.Image, camera *game.Camera) {
+func (s *StartLevel) Draw(screen *ebiten.Image, camera *display.Camera) {
 	s.location.Draw(screen, camera)
 }
