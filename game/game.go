@@ -36,7 +36,6 @@ func (g *Game) Update() error {
 func (g *Game) Draw(screen *ebiten.Image) {
 	g.level.Draw(screen, g.camera)
 	g.player.Draw(screen, g.camera)
-
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
