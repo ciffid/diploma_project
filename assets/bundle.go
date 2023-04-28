@@ -16,16 +16,27 @@ import (
 //go:embed data
 var fs embed.FS
 var Images = make(map[string]*ebiten.Image)
+var Fonts = make(map[string]*etxt.Font)
 
-const TileSize = 32
+const (
+	TileSize = 32
+)
 
 func init() {
 	tiles := LoadImage(fs, "data/image/tiles.png")
-	Images["grass"] = SplitImage(tiles, 0, 0, TileSize, TileSize)
+	Images["grass0"] = SplitImage(tiles, TileSize*0, 0, TileSize, TileSize)
+	Images["grass1"] = SplitImage(tiles, TileSize, 0, TileSize, TileSize)
+	Images["grass2"] = SplitImage(tiles, TileSize*2, 0, TileSize, TileSize)
+	Images["grass3"] = SplitImage(tiles, TileSize*3, 0, TileSize, TileSize)
 	Images["wall"] = SplitImage(tiles, TileSize*4, 0, TileSize, TileSize)
 
 	Images["player"] = LoadImage(fs, "data/image/player.png")
 	Images["start-location"] = LoadImage(fs, "data/image/start-location.jpg")
+
+	Images["button-enabled"] = LoadImage(fs, "data/image/button-enabled.png")
+	Images["button-disabled"] = LoadImage(fs, "data/image/button-disabled.png")
+
+	Fonts["start"] = LoadFont(fs, "data/font/roboto-regular.ttf")
 }
 
 func LoadImage(fs embed.FS, path string) *ebiten.Image {

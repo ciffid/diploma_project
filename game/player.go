@@ -2,9 +2,9 @@ package game
 
 import (
 	"dota3/assets"
+	"dota3/data"
 	"dota3/display"
 	"github.com/hajimehoshi/ebiten/v2"
-	"image"
 )
 
 type Direction int
@@ -25,7 +25,7 @@ func NewPlayer(x, y float64) *Player {
 	return &Player{
 		X:         x,
 		Y:         y,
-		Speed:     2,
+		Speed:     0.05,
 		Direction: DirectionLeft,
 		Sprite:    assets.Images["player"],
 	}
@@ -54,11 +54,13 @@ func (p *Player) Draw(screen *ebiten.Image, camera *display.Camera) {
 		op.GeoM.Scale(-1, 1)
 		op.GeoM.Translate(float64(p.Sprite.Bounds().Dx()), 0)
 	}
+	scaledTileSize := assets.TileSize * camera.Scale
+	op.GeoM.Scale(camera.Scale, camera.Scale)
 	op.GeoM.Translate(-camera.X, -camera.Y)
-	op.GeoM.Translate(p.X, p.Y)
+	op.GeoM.Translate(p.X*scaledTileSize, p.Y*scaledTileSize)
 	screen.DrawImage(p.Sprite, op)
 }
 
-func (p *Player) Bounds() image.Rectangle {
-	return image.Rect(int(p.X), int(p.Y), int(p.X)+p.Sprite.Bounds().Dx(), int(p.Y)+p.Sprite.Bounds().Dy())
+func (p *Player) Bounds() data.Bounds {
+	return data.NewBounds(p.X, p.Y, float64(p.Sprite.Bounds().Dx()), float64(p.Sprite.Bounds().Dy()))
 }

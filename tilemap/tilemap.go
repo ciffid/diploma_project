@@ -8,20 +8,28 @@ import (
 )
 
 type Tilemap struct {
-	w, h  int
-	tiles []Tile
+	w, h      int
+	tiles     []Tile
+	offscreen *ebiten.Image
 }
 
 func NewTilemap(w, h int) *Tilemap {
 	t := &Tilemap{
-		w:     w,
-		h:     h,
-		tiles: make([]Tile, w*h),
+		w:         w,
+		h:         h,
+		tiles:     make([]Tile, w*h),
+		offscreen: ebiten.NewImage(w*assets.TileSize, h*assets.TileSize),
 	}
 	for i := 0; i < len(t.tiles); i++ {
-		tile := Grass
-		if random.Chance(0.2) {
-			tile = Wall
+		tile := Grass0
+		if random.Chance(0.7) {
+			tile = Grass1
+			if random.Chance(0.5) {
+				tile = Grass2
+				if random.Chance(0.3) {
+					tile = Grass3
+				}
+			}
 		}
 		t.tiles[i] = tile
 	}
@@ -37,10 +45,14 @@ func (t *Tilemap) Draw(screen *ebiten.Image, camera *display.Camera) {
 			}
 			op := &ebiten.DrawImageOptions{}
 			op.GeoM.Translate(float64(x*assets.TileSize), float64(y*assets.TileSize))
-			op.GeoM.Translate(-camera.X, -camera.Y)
-			screen.DrawImage(Tiles[tile], op)
+			t.offscreen.DrawImage(Tiles[tile], op)
 		}
 	}
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Scale(camera.Scale, camera.Scale)
+	op.GeoM.Translate(-camera.X, -camera.Y)
+	screen.DrawImage(t.offscreen, op)
+	t.offscreen.Clear()
 }
 
 func (t *Tilemap) outside(x, y int) bool {

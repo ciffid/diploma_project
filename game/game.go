@@ -17,8 +17,8 @@ type Game struct {
 
 func NewGame() *Game {
 	g := &Game{
-		player: NewPlayer(100, 100),
 		level:  levels.NewStartLevel(),
+		player: NewPlayer(18, 18),
 		bounds: &image.Rectangle{},
 	}
 	bounder := data.NewScreenBounder(g.bounds)
@@ -29,6 +29,7 @@ func NewGame() *Game {
 func (g *Game) Update() error {
 	g.player.Update()
 	g.level.Update()
+	g.camera.Zoom()
 	g.camera.Focus()
 	return nil
 }

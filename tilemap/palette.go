@@ -9,11 +9,17 @@ type Tile int
 
 const (
 	Air Tile = iota
-	Grass
+	Grass0
+	Grass1
+	Grass2
+	Grass3
 	Wall
 )
 
 var Tiles = map[Tile]*ebiten.Image{
-	Grass: assets.Images["grass"],
-	Wall:  assets.Images["wall"],
+	Grass0: assets.Images["grass0"],
+	Grass1: assets.Images["grass1"],
+	Grass2: assets.Images["grass2"],
+	Grass3: assets.Images["grass3"],
+	Wall:   assets.Images["wall"],
 }
