@@ -1,4 +1,4 @@
-package game
+package entity
 
 import (
 	"dota3/assets"
@@ -17,6 +17,7 @@ const (
 type Player struct {
 	X, Y      float64
 	Speed     float64
+	HitPoints int
 	Direction Direction
 	Sprite    *ebiten.Image
 }

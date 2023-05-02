@@ -4,27 +4,26 @@ import (
 	"dota3/assets"
 	"dota3/data"
 	"github.com/hajimehoshi/ebiten/v2"
+	"image"
 	"math"
 )
 
 type Camera struct {
-	X, Y           float64
-	Scale          float64
-	screen, target data.Bounder
+	X, Y   float64
+	Scale  float64
+	target data.Bounder
 }
 
-func NewCamera(screen, target data.Bounder) *Camera {
+func NewCamera(target data.Bounder) *Camera {
 	return &Camera{
 		target: target,
-		screen: screen,
 		Scale:  2,
 	}
 }
 
-func (c *Camera) Focus() {
-	screen := c.screen.Bounds()
+func (c *Camera) Focus(screen image.Rectangle) {
 	target := c.target.Bounds()
-	sw, sh := screen.W, screen.H
+	sw, sh := float64(screen.Dx()), float64(screen.Dy())
 	tw, th := target.W, target.H
 
 	scaledTileSize := assets.TileSize * c.Scale
