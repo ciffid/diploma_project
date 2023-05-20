@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"dota3/assets"
+	"DP/assets"
 	"image"
 	"image/color"
 	"math"

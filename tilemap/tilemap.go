@@ -1,9 +1,9 @@
 package tilemap
 
 import (
-	"dota3/assets"
-	"dota3/display"
-	"dota3/random"
+	"DP/assets"
+	"DP/display"
+	"DP/helper/random"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -45,7 +45,7 @@ func (t *Tilemap) Draw(screen *ebiten.Image, camera *display.Camera) {
 			}
 			op := &ebiten.DrawImageOptions{}
 			op.GeoM.Translate(float64(x*assets.TileSize), float64(y*assets.TileSize))
-			t.offscreen.DrawImage(Tiles[tile], op)
+			t.offscreen.DrawImage(Tiles[tile].Image(), op)
 		}
 	}
 	op := &ebiten.DrawImageOptions{}

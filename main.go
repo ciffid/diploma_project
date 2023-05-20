@@ -1,7 +1,7 @@
 package main
 
 import (
-	"dota3/game"
+	"DP/game"
 	"github.com/hajimehoshi/ebiten/v2"
 	"log"
 )

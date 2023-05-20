@@ -1,8 +1,8 @@
 package state
 
 import (
-	"dota3/assets"
-	"dota3/ui"
+	"DP/assets"
+	"DP/ui"
 	"github.com/hajimehoshi/ebiten/v2"
 	"golang.org/x/image/colornames"
 	"image"
@@ -17,14 +17,16 @@ func NewMenu(set SetState) *Menu {
 	m := &Menu{set: set}
 	textStart := "Начать игру"
 	m.widgets = []ui.Widget{
-		ui.NewButton(0, 0, 1, 1,
+		ui.NewBackground(0, 0, 1, 1,
+			assets.Images["background"]),
+		ui.NewButton(0.5-0.5/2, 0.35-0.2/2, 0.5, 0.2,
 			assets.Images["button-enabled"],
 			assets.Images["button-disabled"],
 			func() {
 				m.set(NewStartGame(m.set))
 			},
 		),
-		ui.NewLabel(0.5, 0.35, 0.1, colornames.Red, &textStart),
+		ui.NewLabel(0.5, 0.35, 0.1, colornames.Blue, &textStart),
 	}
 	return m
 }

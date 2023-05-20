@@ -1,8 +1,8 @@
 package tilemap
 
 import (
-	"dota3/assets"
-	"github.com/hajimehoshi/ebiten/v2"
+	"DP/assets"
+	"DP/graphics"
 )
 
 type Tile int
@@ -16,7 +16,7 @@ const (
 	Wall
 )
 
-var Tiles = map[Tile]*ebiten.Image{
+var Tiles = map[Tile]*graphics.Frameset{
 	Grass0: assets.Images["grass0"],
 	Grass1: assets.Images["grass1"],
 	Grass2: assets.Images["grass2"],

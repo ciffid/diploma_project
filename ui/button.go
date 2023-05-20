@@ -1,6 +1,7 @@
 package ui
 
 import (
+	"DP/graphics"
 	"image"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -8,14 +9,14 @@ import (
 )
 
 type Button struct {
-	defaultImage, pressedImage *ebiten.Image
+	defaultImage, pressedImage *graphics.Frameset
 	buttonPressed              bool
 	x, y, w, h                 float64
 	px, py, pw, ph             float64
 	callback                   func()
 }
 
-func NewButton(x, y, w, h float64, defaultImage, pressedImage *ebiten.Image, callback func()) *Button {
+func NewButton(x, y, w, h float64, defaultImage, pressedImage *graphics.Frameset, callback func()) *Button {
 	return &Button{
 		defaultImage: defaultImage,
 		pressedImage: pressedImage,
@@ -39,11 +40,12 @@ func (b *Button) Update(screen image.Rectangle) {
 			b.callback()
 		}
 	}
-
+	b.defaultImage.Update()
+	b.pressedImage.Update()
 }
 
 func (b *Button) Draw(screen *ebiten.Image) {
-	iw, ih := float64(b.defaultImage.Bounds().Dx()), float64(b.defaultImage.Bounds().Dy())
+	iw, ih := float64(b.defaultImage.Image().Bounds().Dx()), float64(b.defaultImage.Image().Bounds().Dy())
 	percentIW, percentIH := b.pw/iw, b.ph/ih
 
 	op := &ebiten.DrawImageOptions{}
@@ -54,5 +56,5 @@ func (b *Button) Draw(screen *ebiten.Image) {
 	if b.buttonPressed {
 		button = b.pressedImage
 	}
-	screen.DrawImage(button, op)
+	screen.DrawImage(button.Image(), op)
 }

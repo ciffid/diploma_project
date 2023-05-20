@@ -1,8 +1,8 @@
 package display
 
 import (
-	"dota3/assets"
-	"dota3/data"
+	"DP/assets"
+	"DP/data"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 	"math"
@@ -17,7 +17,7 @@ type Camera struct {
 func NewCamera(target data.Bounder) *Camera {
 	return &Camera{
 		target: target,
-		Scale:  2,
+		Scale:  4,
 	}
 }
 
@@ -41,5 +41,5 @@ func (c *Camera) Zoom() {
 	if delta < 0 {
 		c.Scale *= 0.9
 	}
-	c.Scale = math.Max(0.5, math.Min(5, c.Scale))
+	c.Scale = math.Max(4, math.Min(6, c.Scale))
 }

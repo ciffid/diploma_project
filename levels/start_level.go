@@ -1,8 +1,8 @@
 package levels
 
 import (
-	"dota3/display"
-	"dota3/tilemap"
+	"DP/display"
+	"DP/tilemap"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 

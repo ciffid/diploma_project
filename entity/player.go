@@ -1,9 +1,10 @@
 package entity
 
 import (
-	"dota3/assets"
-	"dota3/data"
-	"dota3/display"
+	"DP/assets"
+	"DP/data"
+	"DP/display"
+	"DP/graphics"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -18,8 +19,8 @@ type Player struct {
 	X, Y      float64
 	Speed     float64
 	HitPoints int
+	Sprite    *graphics.Frameset
 	Direction Direction
-	Sprite    *ebiten.Image
 }
 
 func NewPlayer(x, y float64) *Player {
@@ -27,41 +28,54 @@ func NewPlayer(x, y float64) *Player {
 		X:         x,
 		Y:         y,
 		Speed:     0.05,
-		Direction: DirectionLeft,
-		Sprite:    assets.Images["player"],
+		Direction: DirectionRight,
+		Sprite:    assets.Images["player_run_right"],
 	}
 }
 
 func (p *Player) Update() {
+	xMove, yMove := 0., 0.
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
-		p.Y -= p.Speed
+		yMove -= p.Speed
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
-		p.X -= p.Speed
+		xMove -= p.Speed
 		p.Direction = DirectionLeft
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyS) {
-		p.Y += p.Speed
+		yMove += p.Speed
 	}
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
-		p.X += p.Speed
+		xMove += p.Speed
 		p.Direction = DirectionRight
 	}
+	p.X += xMove
+	p.Y += yMove
+	switch p.Direction {
+	case DirectionLeft:
+		p.Sprite = assets.Images["player_run_left"]
+		if xMove == 0 && yMove == 0 {
+			p.Sprite = assets.Images["player_look_left"]
+		}
+	case DirectionRight:
+		p.Sprite = assets.Images["player_run_right"]
+		if xMove == 0 && yMove == 0 {
+			p.Sprite = assets.Images["player_look_right"]
+		}
+	}
+	p.Sprite.Update()
+
 }
 
 func (p *Player) Draw(screen *ebiten.Image, camera *display.Camera) {
 	op := &ebiten.DrawImageOptions{}
-	if p.Direction == DirectionRight {
-		op.GeoM.Scale(-1, 1)
-		op.GeoM.Translate(float64(p.Sprite.Bounds().Dx()), 0)
-	}
 	scaledTileSize := assets.TileSize * camera.Scale
 	op.GeoM.Scale(camera.Scale, camera.Scale)
 	op.GeoM.Translate(-camera.X, -camera.Y)
 	op.GeoM.Translate(p.X*scaledTileSize, p.Y*scaledTileSize)
-	screen.DrawImage(p.Sprite, op)
+	screen.DrawImage(p.Sprite.Image(), op)
 }
 
 func (p *Player) Bounds() data.Bounds {
-	return data.NewBounds(p.X, p.Y, float64(p.Sprite.Bounds().Dx()), float64(p.Sprite.Bounds().Dy()))
+	return data.NewBounds(p.X, p.Y, float64(p.Sprite.Image().Bounds().Dx()), float64(p.Sprite.Image().Bounds().Dy()))
 }

@@ -1,7 +1,7 @@
 package game
 
 import (
-	"dota3/state"
+	"DP/state"
 	"image"
 
 	"github.com/hajimehoshi/ebiten/v2"

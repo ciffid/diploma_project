@@ -1,58 +1,56 @@
 package assets
 
 import (
-	"bytes"
+	"DP/graphics"
+	"DP/helper/load"
+	"DP/helper/split"
 	"embed"
-	"image"
 	_ "image/jpeg"
 	_ "image/png"
 	"log"
+	"time"
 
 	"github.com/tinne26/etxt"
-
-	"github.com/hajimehoshi/ebiten/v2"
 )
 
 //go:embed data
 var fs embed.FS
-var Images = make(map[string]*ebiten.Image)
+var Images = make(map[string]*graphics.Frameset)
 var Fonts = make(map[string]*etxt.Font)
 
 const (
-	TileSize = 32
+	TileSize  = 32
+	Animation = 100 * time.Millisecond
 )
 
 func init() {
-	tiles := LoadImage(fs, "data/image/tiles.png")
-	Images["grass0"] = SplitImage(tiles, TileSize*0, 0, TileSize, TileSize)
-	Images["grass1"] = SplitImage(tiles, TileSize, 0, TileSize, TileSize)
-	Images["grass2"] = SplitImage(tiles, TileSize*2, 0, TileSize, TileSize)
-	Images["grass3"] = SplitImage(tiles, TileSize*3, 0, TileSize, TileSize)
-	Images["wall"] = SplitImage(tiles, TileSize*4, 0, TileSize, TileSize)
+	tiles := load.Image(fs, "data/image/tiles.png")
+	player := load.Image(fs, "data/image/player-animation.png")
 
-	Images["player"] = LoadImage(fs, "data/image/player.png")
-	Images["start-location"] = LoadImage(fs, "data/image/start-location.jpg")
+	for f := 0; f < 2; f++ {
+		flipped := f == 1
+		postfix := "left"
+		if flipped {
+			postfix = "right"
+		}
+		Images["player_look_"+postfix] = split.Single(player, TileSize*0, 0, TileSize*0.5, TileSize, flipped)
+		Images["player_run_"+postfix] = split.Multi(player, TileSize*0, 0, TileSize*0.5, TileSize, 3, flipped, Animation)
 
-	Images["button-enabled"] = LoadImage(fs, "data/image/button-enabled.png")
-	Images["button-disabled"] = LoadImage(fs, "data/image/button-disabled.png")
+	}
+
+	Images["grass0"] = split.Single(tiles, TileSize*0, 0, TileSize, TileSize, false)
+	Images["grass1"] = split.Single(tiles, TileSize*1, 0, TileSize, TileSize, false)
+	Images["grass2"] = split.Single(tiles, TileSize*2, 0, TileSize, TileSize, false)
+	Images["grass3"] = split.Single(tiles, TileSize*3, 0, TileSize, TileSize, false)
+	Images["wall"] = split.Single(tiles, TileSize*6, 0, TileSize, TileSize, false)
+
+	Images["background"] = graphics.NewFramesetSingle(load.Image(fs, "data/image/background.png"))
+	Images["start-location"] = graphics.NewFramesetSingle(load.Image(fs, "data/image/start-location.jpg"))
+
+	Images["button-enabled"] = graphics.NewFramesetSingle(load.Image(fs, "data/image/button-enabled.png"))
+	Images["button-disabled"] = graphics.NewFramesetSingle(load.Image(fs, "data/image/button-disabled.png"))
 
 	Fonts["start"] = LoadFont(fs, "data/font/roboto-regular.ttf")
-}
-
-func LoadImage(fs embed.FS, path string) *ebiten.Image {
-	data, err := fs.ReadFile(path)
-	if err != nil {
-		log.Fatal(err)
-	}
-	img, _, err := image.Decode(bytes.NewReader(data))
-	if err != nil {
-		log.Fatal(err)
-	}
-	return ebiten.NewImageFromImage(img)
-}
-
-func SplitImage(src *ebiten.Image, x, y, w, h int) *ebiten.Image {
-	return src.SubImage(image.Rect(x, y, x+w, y+h)).(*ebiten.Image)
 }
 
 func LoadFont(fs embed.FS, path string) *etxt.Font {

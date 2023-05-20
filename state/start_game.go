@@ -1,9 +1,9 @@
 package state
 
 import (
-	"dota3/display"
-	"dota3/entity"
-	"dota3/levels"
+	"DP/display"
+	"DP/entity"
+	"DP/levels"
 	"github.com/hajimehoshi/ebiten/v2"
 	"image"
 )
