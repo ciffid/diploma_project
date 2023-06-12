@@ -36,7 +36,7 @@ func (b *Button) Update(screen image.Rectangle) {
 	ccx, ccy := float64(cx), float64(cy)
 	if ccx >= b.px && ccx < b.px+b.pw && ccy >= b.py && ccy < b.py+b.ph {
 		b.buttonPressed = ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft)
-		if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
+		if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) {
 			b.callback()
 		}
 	}

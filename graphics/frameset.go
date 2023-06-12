@@ -24,12 +24,9 @@ func (s *Frameset) Image() *ebiten.Image {
 }
 
 func (s *Frameset) Update() {
-	// Sprites containing one frame show only it.
 	if len(s.Images) < 2 {
 		return
 	}
-
-	// In sprites containing multiple frames, the current frame is constantly changing at the specified interval.
 	select {
 	case <-s.Ticker.C:
 		s.Current = (s.Current + 1) % len(s.Images)

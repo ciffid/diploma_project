@@ -8,25 +8,25 @@ import (
 	"image"
 )
 
-type Menu struct {
+type Settings struct {
 	widgets []ui.Widget
 	set     SetState
 }
 
-func NewMenu(set SetState) *Menu {
-	m := &Menu{set: set}
+func NewSettings(set SetState) *Settings {
+	s := &Settings{set: set}
 	textName := "game name"
 	textPlay := "play"
 	textSettings := "settings"
 	textExit := "exit"
-	m.widgets = []ui.Widget{
+	s.widgets = []ui.Widget{
 		ui.NewBackground(0, 0, 1, 1,
 			assets.Images["background"]),
 		ui.NewButton(0.5-0.5/2, 0.45-0.2/2, 0.5, 0.15,
 			assets.Images["button-enabled"],
 			assets.Images["button-disabled"],
 			func() {
-				m.set(NewStartGame(m.set))
+				s.set(NewStartGame(s.set))
 			},
 		),
 		ui.NewButton(0.5-0.5/2, 0.65-0.2/2, 0.5, 0.15,
@@ -46,18 +46,18 @@ func NewMenu(set SetState) *Menu {
 		ui.NewLabel(0.5, 0.63, 0.07, colornames.Black, &textSettings),
 		ui.NewLabel(0.5, 0.83, 0.09, colornames.Black, &textExit),
 	}
-	return m
+	return s
 }
 
-func (m *Menu) Update(screen image.Rectangle) error {
-	for _, widget := range m.widgets {
+func (s *Settings) Update(screen image.Rectangle) error {
+	for _, widget := range s.widgets {
 		widget.Update(screen)
 	}
 	return nil
 }
 
-func (m *Menu) Draw(screen *ebiten.Image) {
-	for _, widget := range m.widgets {
+func (s *Settings) Draw(screen *ebiten.Image) {
+	for _, widget := range s.widgets {
 		widget.Draw(screen)
 	}
 }

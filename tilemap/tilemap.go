@@ -5,33 +5,41 @@ import (
 	"DP/display"
 	"DP/helper/random"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/solarlune/resolv"
 )
 
 type Tilemap struct {
 	w, h      int
 	tiles     []Tile
+	boxes     []*resolv.Object
 	offscreen *ebiten.Image
 }
 
-func NewTilemap(w, h int) *Tilemap {
+func NewTilemap(w, h int, space *resolv.Space) *Tilemap {
 	t := &Tilemap{
 		w:         w,
 		h:         h,
 		tiles:     make([]Tile, w*h),
 		offscreen: ebiten.NewImage(w*assets.TileSize, h*assets.TileSize),
 	}
-	for i := 0; i < len(t.tiles); i++ {
-		tile := Grass0
-		if random.Chance(0.7) {
-			tile = Grass1
-			if random.Chance(0.5) {
+	for y := 0; y < t.h; y++ {
+		for x := 0; x < t.w; x++ {
+			tile := Grass0
+			switch {
+			case random.Chance(0.2):
+				tile = Grass1
+			case random.Chance(0.2):
 				tile = Grass2
-				if random.Chance(0.3) {
-					tile = Grass3
-				}
+			case random.Chance(0.2):
+				tile = Grass3
+			case random.Chance(0.1):
+				tile = Wall
+				obj := resolv.NewObject(float64(x), float64(y), 1, 1)
+				space.Add(obj)
+				t.boxes = append(t.boxes, obj)
 			}
+			t.set(x, y, tile)
 		}
-		t.tiles[i] = tile
 	}
 	return t
 }

@@ -19,13 +19,21 @@ var Images = make(map[string]*graphics.Frameset)
 var Fonts = make(map[string]*etxt.Font)
 
 const (
-	TileSize  = 32
-	Animation = 100 * time.Millisecond
+	TileSize    = 32
+	PlayerW     = 16
+	PlayerH     = 32
+	TileMapSize = 36
+	Animation   = 100 * time.Millisecond
 )
 
 func init() {
 	tiles := load.Image(fs, "data/image/tiles.png")
 	player := load.Image(fs, "data/image/player-animation.png")
+	enemy := load.Image(fs, "data/image/enemy-animation.png")
+
+	Images["enemy_look"] = split.Single(enemy, PlayerW*4, 0, PlayerW, PlayerH, false)
+
+	Images["player_look"] = split.Single(player, PlayerW*4, 0, PlayerW, PlayerH, false)
 
 	for f := 0; f < 2; f++ {
 		flipped := f == 1
@@ -33,16 +41,17 @@ func init() {
 		if flipped {
 			postfix = "right"
 		}
-		Images["player_look_"+postfix] = split.Single(player, TileSize*0, 0, TileSize*0.5, TileSize, flipped)
-		Images["player_run_"+postfix] = split.Multi(player, TileSize*0, 0, TileSize*0.5, TileSize, 3, flipped, Animation)
-
+		Images["player_run_"+postfix] = split.Multi(player, PlayerW*0, 0, PlayerW, PlayerH, 3, flipped, Animation)
 	}
+
+	Images["player_run_down"] = split.Multi(player, PlayerW*3, 0, PlayerW, PlayerH, 3, false, Animation)
+	Images["player_run_up"] = split.Multi(player, PlayerW*6, 0, PlayerW, PlayerH, 3, false, Animation)
 
 	Images["grass0"] = split.Single(tiles, TileSize*0, 0, TileSize, TileSize, false)
 	Images["grass1"] = split.Single(tiles, TileSize*1, 0, TileSize, TileSize, false)
 	Images["grass2"] = split.Single(tiles, TileSize*2, 0, TileSize, TileSize, false)
 	Images["grass3"] = split.Single(tiles, TileSize*3, 0, TileSize, TileSize, false)
-	Images["wall"] = split.Single(tiles, TileSize*6, 0, TileSize, TileSize, false)
+	Images["wall"] = split.Single(tiles, TileSize*7, 0, TileSize, TileSize, false)
 
 	Images["background"] = graphics.NewFramesetSingle(load.Image(fs, "data/image/background.png"))
 	Images["start-location"] = graphics.NewFramesetSingle(load.Image(fs, "data/image/start-location.jpg"))
@@ -50,7 +59,7 @@ func init() {
 	Images["button-enabled"] = graphics.NewFramesetSingle(load.Image(fs, "data/image/button-enabled.png"))
 	Images["button-disabled"] = graphics.NewFramesetSingle(load.Image(fs, "data/image/button-disabled.png"))
 
-	Fonts["start"] = LoadFont(fs, "data/font/roboto-regular.ttf")
+	Fonts["start"] = LoadFont(fs, "data/font/Motel King Medium(RUS by Slavchansky).ttf")
 }
 
 func LoadFont(fs embed.FS, path string) *etxt.Font {

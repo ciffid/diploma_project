@@ -17,7 +17,7 @@ type Camera struct {
 func NewCamera(target data.Bounder) *Camera {
 	return &Camera{
 		target: target,
-		Scale:  4,
+		Scale:  6,
 	}
 }
 
@@ -41,5 +41,5 @@ func (c *Camera) Zoom() {
 	if delta < 0 {
 		c.Scale *= 0.9
 	}
-	c.Scale = math.Max(4, math.Min(6, c.Scale))
+	c.Scale = math.Max(4, math.Min(8, c.Scale))
 }

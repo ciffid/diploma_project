@@ -8,6 +8,7 @@ import (
 
 func main() {
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
+	ebiten.SetWindowSize(1280, 720)
 	if err := ebiten.RunGame(game.NewGame()); err != nil {
 		log.Fatal(err)
 	}
