@@ -15,36 +15,60 @@ type Settings struct {
 
 func NewSettings(set SetState) *Settings {
 	s := &Settings{set: set}
-	textName := "game name"
-	textPlay := "play"
 	textSettings := "settings"
-	textExit := "exit"
+	textAudio := "audio"
+	textGraphics := "graphics"
+	textGame := "game"
+	textKeyBinder := "key binder"
+	textBack := "back"
 	s.widgets = []ui.Widget{
+
 		ui.NewBackground(0, 0, 1, 1,
 			assets.Images["background"]),
-		ui.NewButton(0.5-0.5/2, 0.45-0.2/2, 0.5, 0.15,
+		ui.NewBackground(0, 0, 1, 1,
+			assets.Images["settings"]),
+
+		ui.NewButton(0.3, 0.35, 0.4, 0.09,
 			assets.Images["button-enabled"],
 			assets.Images["button-disabled"],
 			func() {
 				s.set(NewStartGame(s.set))
 			},
 		),
-		ui.NewButton(0.5-0.5/2, 0.65-0.2/2, 0.5, 0.15,
+		ui.NewButton(0.3, 0.45, 0.4, 0.09,
 			assets.Images["button-enabled"],
 			assets.Images["button-disabled"],
 			func() {
+				s.set(NewStartGame(s.set))
 			},
 		),
-		ui.NewButton(0.5-0.5/2, 0.85-0.2/2, 0.5, 0.15,
+		ui.NewButton(0.3, 0.55, 0.4, 0.09,
 			assets.Images["button-enabled"],
 			assets.Images["button-disabled"],
 			func() {
+				s.set(NewSettings(s.set))
 			},
 		),
-		ui.NewLabel(0.5, 0.13, 0.16, colornames.Black, &textName),
-		ui.NewLabel(0.5, 0.43, 0.1, colornames.Black, &textPlay),
-		ui.NewLabel(0.5, 0.63, 0.07, colornames.Black, &textSettings),
-		ui.NewLabel(0.5, 0.83, 0.09, colornames.Black, &textExit),
+		ui.NewButton(0.3, 0.65, 0.4, 0.09,
+			assets.Images["button-enabled"],
+			assets.Images["button-disabled"],
+			func() {
+				s.set(NewStartGame(s.set))
+			},
+		),
+		ui.NewButton(0.3, 0.75, 0.4, 0.09,
+			assets.Images["button-enabled"],
+			assets.Images["button-disabled"],
+			func() {
+				s.set(NewMenu(s.set))
+			},
+		),
+		ui.NewLabel(0.5, 0.15, 0.14, colornames.White, &textSettings),
+		ui.NewLabel(0.5, 0.4, 0.08, colornames.Black, &textGame),
+		ui.NewLabel(0.5, 0.5, 0.067, colornames.Black, &textAudio),
+		ui.NewLabel(0.5, 0.6, 0.06, colornames.Black, &textGraphics),
+		ui.NewLabel(0.5, 0.7, 0.047, colornames.Black, &textKeyBinder),
+		ui.NewLabel(0.5, 0.8, 0.075, colornames.Black, &textBack),
 	}
 	return s
 }

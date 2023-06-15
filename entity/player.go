@@ -25,7 +25,6 @@ const (
 type Player struct {
 	X, Y      float64
 	Speed     float64
-	HitPoints int
 	Sprite    *graphics.Frameset
 	Direction Direction
 	Box       *resolv.Object
@@ -102,6 +101,7 @@ func (p *Player) Update(screen image.Rectangle, camera *display.Camera) {
 	p.move(xMove, yMove)
 	p.Sprite.Update()
 	p.Box.Update()
+
 }
 
 func (p *Player) Draw(screen *ebiten.Image, camera *display.Camera) {

@@ -41,5 +41,5 @@ func (c *Camera) Zoom() {
 	if delta < 0 {
 		c.Scale *= 0.9
 	}
-	c.Scale = math.Max(4, math.Min(8, c.Scale))
+	c.Scale = math.Max(2, math.Min(8, c.Scale))
 }

@@ -15,7 +15,8 @@ import (
 type StartGame struct {
 	set     SetState
 	player  *entity.Player
-	tilemap *tilemap.Tilemap
+	enemy   *entity.Enemy
+	tileMap *tilemap.Tilemap
 	camera  *display.Camera
 	bounds  *image.Rectangle
 	space   *resolv.Space
@@ -28,24 +29,26 @@ func NewStartGame(set SetState) *StartGame {
 		space: resolv.NewSpace(assets.TileMapSize, assets.TileMapSize, 1, 1),
 	}
 	textName := "menu"
-	s.tilemap = tilemap.NewTilemap(assets.TileMapSize, assets.TileMapSize, s.space)
+	s.tileMap = tilemap.NewTilemap(assets.TileMapSize, assets.TileMapSize, s.space)
 	s.player = entity.NewPlayer(18, 18, s.space)
+	s.enemy = entity.NewEnemy(5, 16)
 	s.camera = display.NewCamera(s.player)
 	s.widgets = []ui.Widget{
-		ui.NewButton(0.01, 0.025, 0.08, 0.05,
+		ui.NewButton(0.01, 0.02, 0.08, 0.04,
 			assets.Images["button-enabled"],
 			assets.Images["button-disabled"],
 			func() {
 				s.set(NewMenu(s.set))
 			},
 		),
-		ui.NewLabel(0.05, 0.05, 0.03, colornames.Black, &textName),
+		ui.NewLabel(0.05, 0.04, 0.02, colornames.Black, &textName),
 	}
 	return s
 }
 
 func (s *StartGame) Update(screen image.Rectangle) error {
 	s.player.Update(screen, s.camera)
+	s.enemy.Update()
 	s.camera.Zoom()
 	s.camera.Focus(screen)
 	for _, widget := range s.widgets {
@@ -55,8 +58,9 @@ func (s *StartGame) Update(screen image.Rectangle) error {
 }
 
 func (s *StartGame) Draw(screen *ebiten.Image) {
-	s.tilemap.Draw(screen, s.camera)
+	s.tileMap.Draw(screen, s.camera)
 	s.player.Draw(screen, s.camera)
+	s.enemy.Draw(screen, s.camera)
 	for _, widget := range s.widgets {
 		widget.Draw(screen)
 	}

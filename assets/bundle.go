@@ -32,6 +32,17 @@ func init() {
 	enemy := load.Image(fs, "data/image/enemy-animation.png")
 
 	Images["enemy_look"] = split.Single(enemy, PlayerW*4, 0, PlayerW, PlayerH, false)
+	for f := 0; f < 2; f++ {
+		flipped := f == 1
+		postfix := "left"
+		if flipped {
+			postfix = "right"
+		}
+		Images["enemy_run_"+postfix] = split.Multi(enemy, PlayerW*0, 0, PlayerW, PlayerH, 3, flipped, Animation)
+	}
+
+	Images["enemy_run_down"] = split.Multi(enemy, PlayerW*3, 0, PlayerW, PlayerH, 3, false, Animation)
+	Images["enemy_run_up"] = split.Multi(enemy, PlayerW*6, 0, PlayerW, PlayerH, 3, false, Animation)
 
 	Images["player_look"] = split.Single(player, PlayerW*4, 0, PlayerW, PlayerH, false)
 
@@ -54,6 +65,7 @@ func init() {
 	Images["wall"] = split.Single(tiles, TileSize*7, 0, TileSize, TileSize, false)
 
 	Images["background"] = graphics.NewFramesetSingle(load.Image(fs, "data/image/background.png"))
+	Images["settings"] = graphics.NewFramesetSingle(load.Image(fs, "data/image/settings.png"))
 	Images["start-location"] = graphics.NewFramesetSingle(load.Image(fs, "data/image/start-location.jpg"))
 
 	Images["button-enabled"] = graphics.NewFramesetSingle(load.Image(fs, "data/image/button-enabled.png"))

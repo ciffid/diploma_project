@@ -5,8 +5,8 @@ import (
 	"DP/data"
 	"DP/display"
 	"DP/graphics"
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/solarlune/resolv"
+	"fmt"
+	"time"
 )
 
 type Enemy struct {
@@ -15,77 +15,58 @@ type Enemy struct {
 	HitPoints int
 	Sprite    *graphics.Frameset
 	Direction Direction
-	PlayerObj *resolv.Object
+	Ticker    *time.Ticker
 }
 
 func NewEnemy(x, y float64) *Enemy {
 	return &Enemy{
 		X:         x,
 		Y:         y,
-		Speed:     0.05,
+		Speed:     0.03,
 		Sprite:    assets.Images["enemy_look"],
-		PlayerObj: resolv.NewObject(x, y, 16, 32),
+		Direction: DirectionRight,
+		Ticker:    time.NewTicker(time.Second * 3),
 	}
 }
 
 func (e *Enemy) Update() {
-	//xMove, yMove := 0., 0.
-	//
-	//cx, cy := ebiten.CursorPosition()
-	//ccx, ccy := (float64(cx) - float64(screen.Bounds().Dx())/2), (float64(cy) - float64(screen.Bounds().Dy())/2)
-	//l := math.Sqrt(ccx*ccx + ccy*ccy)
-	//angle := math.Atan2(ccy, ccx)
-	//
-	//if inpututil.IsKeyJustPressed(ebiten.KeySpace) {
-	//	xMove, yMove = l*math.Cos(angle)/assets.TileSize/camera.Scale, l*math.Sin(angle)/assets.TileSize/camera.Scale
+
+	select {
+	case <-e.Ticker.C:
+		e.Speed *= -1
+		fmt.Println(e.Speed)
+	default:
+	}
+
+	e.X += e.Speed
+	e.Y += 0
+
+	if e.Speed < 0 {
+		e.Direction = DirectionLeft
+		e.Sprite = assets.Images["enemy_run_left"]
+	}
+	//if xMove == 0 && yMove == 0 {
+	//	e.Sprite = assets.Images["enemy_look"]
 	//}
-	//if ebiten.IsKeyPressed(ebiten.KeyW) {
-	//	yMove -= e.Speed
-	//	e.Direction = DirectionUp
+	if e.Speed > 0 {
+		e.Direction = DirectionLeft
+		e.Sprite = assets.Images["enemy_run_right"]
+	}
+	//if xMove == 0 && yMove == 0 {
+	//	e.Sprite = assets.Images["enemy_look"]
 	//}
-	//if ebiten.IsKeyPressed(ebiten.KeyS) {
-	//	yMove += e.Speed
-	//	e.Direction = DirectionDown
-	//}
-	//if ebiten.IsKeyPressed(ebiten.KeyA) {
-	//	xMove -= e.Speed
-	//	e.Direction = DirectionLeft
-	//}
-	//if ebiten.IsKeyPressed(ebiten.KeyD) {
-	//	xMove += e.Speed
-	//	e.Direction = DirectionRight
-	//}
-	//e.X += xMove
-	//e.Y += yMove
-	//
-	//playerObj.X += 1
-	//playerObj.Y += xMove
-	//
-	//switch e.Direction {
-	//case DirectionLeft:
-	//	e.Sprite = assets.Images["player_run_left"]
-	//	if xMove == 0 && yMove == 0 {
-	//		e.Sprite = assets.Images["player_look"]
-	//	}
-	//case DirectionRight:
-	//	e.Sprite = assets.Images["player_run_right"]
-	//	if xMove == 0 && yMove == 0 {
-	//		e.Sprite = assets.Images["player_look"]
-	//	}
 	//case DirectionDown:
-	//	e.Sprite = assets.Images["player_run_down"]
+	//	e.Sprite = assets.Images["enemy_run_down"]
 	//	if xMove == 0 && yMove == 0 {
-	//		e.Sprite = assets.Images["player_look"]
+	//		e.Sprite = assets.Images["enemy_look"]
 	//	}
 	//case DirectionUp:
-	//	e.Sprite = assets.Images["player_run_up"]
+	//	e.Sprite = assets.Images["enemy_run_up"]
 	//	if xMove == 0 && yMove == 0 {
-	//		e.Sprite = assets.Images["player_look"]
+	//		e.Sprite = assets.Images["enemy_look"]
 	//	}
-	//}
-	//
-	//e.Sprite.Update()
-	//e.Box.Update()
+
+	e.Sprite.Update()
 }
 
 func (e *Enemy) Draw(screen *ebiten.Image, camera *display.Camera) {
