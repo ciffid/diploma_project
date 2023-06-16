@@ -34,7 +34,7 @@ func NewTilemap(w, h int, space *resolv.Space) *Tilemap {
 				tile = Grass3
 			case random.Chance(0.1):
 				tile = Wall
-				obj := resolv.NewObject(float64(x), float64(y), 1, 1)
+				obj := resolv.NewObject(float64(x)*10, float64(y)*10, 10, 10)
 				space.Add(obj)
 				t.boxes = append(t.boxes, obj)
 			}

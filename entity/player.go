@@ -5,7 +5,6 @@ import (
 	"DP/data"
 	"DP/display"
 	"DP/graphics"
-	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/solarlune/resolv"
@@ -38,7 +37,7 @@ func NewPlayer(x, y float64, space *resolv.Space) *Player {
 		Direction: DirectionRight,
 		Sprite:    assets.Images["player_run_right"],
 	}
-	p.Box = resolv.NewObject(x, y, 0.5, 0.6)
+	p.Box = resolv.NewObject(x*10, y*10, 5, 6)
 	space.Add(p.Box)
 	return p
 }
@@ -93,12 +92,16 @@ func (p *Player) Update(screen image.Rectangle, camera *display.Camera) {
 			p.Sprite = assets.Images["player_look"]
 		}
 	}
-	if collision := p.Box.Check(xMove, yMove); collision != nil {
-		contact := collision.ContactWithObject(collision.Objects[0])
-		xMove, yMove = 0, 0
-		fmt.Println(contact.X(), contact.Y())
+	if collision := p.Box.Check(xMove, 0); collision != nil {
+		xMove = collision.ContactWithObject(collision.Objects[0]).X() / 10
 	}
-	p.move(xMove, yMove)
+	if collision := p.Box.Check(0, yMove); collision != nil {
+		yMove = collision.ContactWithObject(collision.Objects[0]).Y() / 10
+	}
+	p.X += xMove
+	p.Y += yMove
+	p.Box.X += xMove * 10
+	p.Box.Y += yMove * 10
 	p.Sprite.Update()
 	p.Box.Update()
 
@@ -115,11 +118,4 @@ func (p *Player) Draw(screen *ebiten.Image, camera *display.Camera) {
 
 func (p *Player) Bounds() data.Bounds {
 	return data.NewBounds(p.X, p.Y, float64(p.Sprite.Image().Bounds().Dx()), float64(p.Sprite.Image().Bounds().Dy()))
-}
-
-func (p *Player) move(dx, dy float64) {
-	p.X += dx
-	p.Y += dy
-	p.Box.X += dx
-	p.Box.Y += dy
 }

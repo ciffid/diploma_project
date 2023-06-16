@@ -5,7 +5,7 @@ import (
 	"DP/data"
 	"DP/display"
 	"DP/graphics"
-	"fmt"
+	"github.com/hajimehoshi/ebiten/v2"
 	"time"
 )
 
@@ -34,7 +34,6 @@ func (e *Enemy) Update() {
 	select {
 	case <-e.Ticker.C:
 		e.Speed *= -1
-		fmt.Println(e.Speed)
 	default:
 	}
 

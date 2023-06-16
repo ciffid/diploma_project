@@ -26,7 +26,7 @@ type StartGame struct {
 func NewStartGame(set SetState) *StartGame {
 	s := &StartGame{
 		set:   set,
-		space: resolv.NewSpace(assets.TileMapSize, assets.TileMapSize, 1, 1),
+		space: resolv.NewSpace(1000, 1000, 10, 10),
 	}
 	textName := "menu"
 	s.tileMap = tilemap.NewTilemap(assets.TileMapSize, assets.TileMapSize, s.space)
